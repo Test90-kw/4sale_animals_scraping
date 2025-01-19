@@ -38,7 +38,7 @@ class DetailsScraping:
                     for card in animal_cards:
                         # Extract car information
                         link = await self.scrape_link(card)
-                        animal_type = await self.scrape_car_type(card)
+                        animal_type = await self.scrape_animal_type(card)
                         title = await self.scrape_title(card)
                         pinned_today = await self.scrape_pinned_today(card)
 
