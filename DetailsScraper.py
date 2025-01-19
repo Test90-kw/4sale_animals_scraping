@@ -16,7 +16,7 @@ class DetailsScraping:
         self.url = url
         self.retries = retries  # Retry count for robustness
 
-    async def get_car_details(self):
+    async def get_animal_details(self):
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             page = await browser.new_page()
@@ -25,7 +25,7 @@ class DetailsScraping:
             page.set_default_navigation_timeout(30000)
             page.set_default_timeout(30000)  # General timeout
 
-            cars = []  # To store scraped cars
+            animals = []  # To store scraped cars
 
             for attempt in range(self.retries):
                 try:
@@ -34,23 +34,23 @@ class DetailsScraping:
                     await page.wait_for_selector('.StackedCard_card__Kvggc', timeout=30000)
 
                     # Extract car details
-                    car_cards = await page.query_selector_all('.StackedCard_card__Kvggc')
-                    for card in car_cards:
+                    animal_cards = await page.query_selector_all('.StackedCard_card__Kvggc')
+                    for card in animal_cards:
                         # Extract car information
                         link = await self.scrape_link(card)
-                        car_type = await self.scrape_car_type(card)
+                        animal_type = await self.scrape_car_type(card)
                         title = await self.scrape_title(card)
                         pinned_today = await self.scrape_pinned_today(card)
 
                         # Scrape scrape_more_details from the car page
                         scrape_more_details = await self.scrape_more_details(link)
 
-                        cars.append({
+                        animals.append({
                             'id': scrape_more_details.get('id'),
                             'date_published': scrape_more_details.get('date_published'),
                             'relative_date': scrape_more_details.get('relative_date'),
                             'pin': pinned_today,
-                            'type': car_type,
+                            'type': animal_type,
                             'title': title,
                             'description': scrape_more_details.get('description'),
                             'link': link,
@@ -79,7 +79,7 @@ class DetailsScraping:
                         page = await browser.new_page()
 
             await browser.close()
-            return cars
+            return animals
 
     # Method to scrape the link
     async def scrape_link(self, card):
@@ -88,7 +88,7 @@ class DetailsScraping:
         return f"{base_url}{rawlink}" if rawlink else None
 
     # Method to scrape the car type
-    async def scrape_car_type(self, card):
+    async def scrape_animal_type(self, card):
         selector = '.text-6-med.text-neutral_600.styles_category__NQAci'
         element = await card.query_selector(selector)
         return await element.inner_text() if element else None
