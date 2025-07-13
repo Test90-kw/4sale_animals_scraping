@@ -418,15 +418,3 @@ class DetailsScraping:
                     return {}
 
         return {}
-
-# # Correctly run the async function with an instance of the class
-# if __name__ == "__main__":
-#     # Initialize the scraper with the main page URL
-#     scraper = DetailsScraping("https://www.q84sale.com/ar/automotive/automotive-accessories/1")
-#
-#     # Use asyncio.run to execute the async function
-#     cars = asyncio.run(scraper.get_car_details())
-#
-#     # Print the extracted details
-#     for car in cars:
-#         print(car)
